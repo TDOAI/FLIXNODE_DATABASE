@@ -1,0 +1,36 @@
+name: DATABASE
+
+on:
+  workflow_dispatch:
+
+env:
+  DB_ID: ${{ secrets.DB_ID }}
+  DB_FULL: ${{ secrets.DB_FULL }}
+  API_KEY: ${{ secrets.API_KEY }}
+  BASE_URL: ${{ secrets.BASE_URL }}
+  IMG_BASE_URL: ${{ secrets.IMG_BASE_URL }}
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  MOVIE:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.16'
+      - run: yarn
+      - name: Run script
+        run: node Movie.js
+      - uses: gautamkrishnar/keepalive-workflow@v1
+  TV:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.16'
+      - run: yarn
+      - name: Run script
+        run: node TV.js
+      - uses: gautamkrishnar/keepalive-workflow@v1
