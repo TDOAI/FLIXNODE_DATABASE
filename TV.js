@@ -168,7 +168,7 @@ async function main () {
     try {
         console.time("Time");
         const array = await fetch();
-        const chunks = await chunkify(array, 25, true)
+        const chunks = await chunkify(array, 35, true)
         await database(chunks);
         console.timeEnd("Time");
     } finally {
