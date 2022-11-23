@@ -112,7 +112,7 @@ async function database (chunks) {
                 if (res.poster_path || res.backdrop_path != null ) {
                     const placeholder = await getPlaiceholder(`${img_base_url}w500${res.poster_path || res.backdrop_path}`)
                     const blur = placeholder.blurhash.hash
-                    blurhash = blur
+                    blurhash = `${blur}`
                 }
                 else {
                     blurhash = null
@@ -168,7 +168,7 @@ async function main () {
     try {
         console.time("Time");
         const array = await fetch();
-        const chunks = await chunkify(array, 35, true)
+        const chunks = await chunkify(array, 25, true)
         await database(chunks);
         console.timeEnd("Time");
     } finally {
