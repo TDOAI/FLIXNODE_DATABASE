@@ -139,7 +139,7 @@ async function database (chunks) {
                     vote_count: res.vote_count
                 }
                 // execute find query
-                const query = { _id: res.id };
+                const query = { stream_id: card.stream_id };
                 const update = { $set: document };
                 const options = { upsert: true };
                 await CARD.updateOne(query, update, options);

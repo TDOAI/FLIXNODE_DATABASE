@@ -142,16 +142,16 @@ async function database (chunks) {
                     vote_count: res.vote_count
                 }
                 // execute find query
-                const query = { _id: res.id };
+                const query = { stream_id: card.stream_id };
                 const update = { $set: document };
                 const options = { upsert: true };
-                await TV_FULL.updateOne(query, update, options);
+                await CARD.updateOne(query, update, options);
             } else {
                 const doc = {
                     tmdb_id: card.tmdb_id,
                     stream_id: card.stream_id
                 }
-                const check = await TV_FULL.findOne({ stream_id: card.stream_id });
+                const check = await CARD.findOne({ stream_id: card.stream_id });
                 const check_error = await TV_With_Error.findOne({ stream_id: card.stream_id });
                 if (!check && !check_error) {
                     const newError = new TV_With_Error(doc);
