@@ -1,7 +1,6 @@
 require('dotenv').config();
 const axios = require("axios");
 const mongoose = require("mongoose");
-const { getPlaiceholder } = require('plaiceholder');
 const { TVsSchema_id, CardsSchema, TVsErrorSchema  } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
@@ -108,15 +107,6 @@ async function database (chunks) {
             const req = await instance.get(`tv/${card.tmdb_id}?api_key=${api_key}&append_to_response=keywords`)
             const res = req.data
             if ( res.status_message != 'The resource you requested could not be found.') {
-                let blurhash
-                if (res.poster_path || res.backdrop_path != null ) {
-                    const placeholder = await getPlaiceholder(`${img_base_url}w500${res.poster_path || res.backdrop_path}`)
-                    const blur = placeholder.blurhash.hash
-                    blurhash = `${blur}`
-                }
-                else {
-                    blurhash = null
-                }
                 const runtime = res.episode_run_time[0];
                 const keywords = {
                     keywords: await res.keywords.results
@@ -127,7 +117,6 @@ async function database (chunks) {
                     media_type: 'tv',
                     backdrop_path: res.backdrop_path,
                     poster_path: res.poster_path,
-                    blurhash: blurhash,
                     original_title: res.original_name,
                     title: res.name,
                     tagline: res.tagline,
@@ -168,7 +157,7 @@ async function main () {
     try {
         console.time("Time");
         const array = await fetch();
-        const chunks = await chunkify(array, 100, true)
+        const chunks = await chunkify(array, 25, true)
         await database(chunks);
         console.timeEnd("Time");
     } finally {
