@@ -2,7 +2,7 @@ require('dotenv').config();
 const axios = require("axios");
 const mongoose = require("mongoose");
 const { getPlaiceholder } = require('plaiceholder');
-const { MoviesSchema_id, MoviesSchema, MoviesSchema_error } = require('./models/Movie_Model');
+const { TVsSchema_id, CardsSchema, TVsErrorSchema  } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
 
@@ -45,9 +45,9 @@ FULL_DB.on("error", console.error.bind(console, "DB_FULL connection error:"));
 FULL_DB.on("connected",() => console.log("SUCCESSFULLY CONNECTED FROM DB_FULL"));
 FULL_DB.on("close",() => console.log("SUCCESSFULLY DISCONNECTED FROM DB_FULL"));
 
-const TV_ID = ID_DB.model("Tvshow", MoviesSchema_id);
-const TV_FULL = FULL_DB.model("Tvshow", MoviesSchema);
-const TV_With_Error = FULL_DB.model("TV_Error", MoviesSchema_error);
+const TV_ID = ID_DB.model("Tvshow", TVsSchema_id);
+const CARD = FULL_DB.model("Card", CardsSchema);
+const TV_With_Error = FULL_DB.model("TV_Error", TVsErrorSchema);
 
 
 async function fetch () {
@@ -122,7 +122,7 @@ async function database (chunks) {
                     keywords: await res.keywords.results
                 };
                 const document = { 
-                    _id: res.id,
+                    tmdb_id: res.id,
                     stream_id: card.stream_id,
                     media_type: 'tv',
                     backdrop_path: res.backdrop_path,

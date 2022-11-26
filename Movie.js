@@ -2,7 +2,7 @@ require('dotenv').config();
 const axios = require("axios");
 const mongoose = require("mongoose");
 const { getPlaiceholder } = require('plaiceholder');
-const { MoviesSchema_id, MoviesSchema, MoviesSchema_error } = require('./models/Movie_Model');
+const { MoviesSchema_id, CardsSchema, MoviesErrorSchema } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
 
@@ -46,8 +46,8 @@ FULL_DB.on("connected",() => console.log("SUCCESSFULLY CONNECTED FROM DB_FULL"))
 FULL_DB.on("close",() => console.log("SUCCESSFULLY DISCONNECTED FROM DB_FULL"));
 
 const Movie_ID = ID_DB.model("Movie", MoviesSchema_id);
-const Movie_FULL = FULL_DB.model("Movie", MoviesSchema);
-const Movie_With_Error = FULL_DB.model("Movie_Error", MoviesSchema_error);
+const CARD = FULL_DB.model("Card", CardsSchema);
+const Movie_With_Error = FULL_DB.model("Movie_Error", MoviesErrorSchema);
 
 
 async function fetch () {
@@ -118,7 +118,7 @@ async function database (chunks) {
                     blurhash = null
                 }
                 const document = { 
-                    _id: res.id,
+                    tmdb_id: res.id,
                     stream_id: card.stream_id,
                     media_type: 'movie',
                     backdrop_path: res.backdrop_path,
@@ -142,13 +142,13 @@ async function database (chunks) {
                 const query = { _id: res.id };
                 const update = { $set: document };
                 const options = { upsert: true };
-                await Movie_FULL.updateOne(query, update, options);
+                await CARD.updateOne(query, update, options);
             } else {
                 const doc = {
                     tmdb_id: card.tmdb_id,
                     stream_id: card.stream_id
                 }
-                const check = await Movie_FULL.findOne({ stream_id: card.stream_id });
+                const check = await CARD.findOne({ stream_id: card.stream_id });
                 const check_error = await Movie_With_Error.findOne({ stream_id: card.stream_id });
                 if (!check && !check_error) {
                     const newError = new Movie_With_Error(doc);
