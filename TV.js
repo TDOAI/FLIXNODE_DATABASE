@@ -109,8 +109,8 @@ async function database (chunks) {
             const res = req.data
             if ( res.status_message != 'The resource you requested could not be found.') {
                 let blurhash
-                if (card.poster_path || card.backdrop_path !== null) {
-                    const placeholder = await getPlaiceholder(`${img_base_url}w500${card.poster_path || card.backdrop_path}`)
+                if (res.poster_path || res.backdrop_path !== null) {
+                    const placeholder = await getPlaiceholder(`${img_base_url}w500${res.poster_path || res.backdrop_path}`)
                     blurhash = `${placeholder.blurhash.hash}`
                 } else {
                     blurhash = 'UMGN$=|}S4]X|}$RWXw#NxWXoJj?=4w}oJw|'
