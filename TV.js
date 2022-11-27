@@ -25,8 +25,8 @@ const FULL_DB = mongoose.createConnection(DB_FULL, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    socketTimeoutMS: 90000,
-    serverSelectionTimeoutMS: 90000,
+    socketTimeoutMS: 1200000,
+    serverSelectionTimeoutMS: 1200000,
     keepAlive: true,
     keepAliveInitialDelay: 30000,
 });
