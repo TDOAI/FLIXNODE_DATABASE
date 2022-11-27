@@ -27,7 +27,6 @@ const FULL_DB = mongoose.createConnection(DB_FULL, {
     serverSelectionTimeoutMS: 90000,
     keepAlive: true,
     keepAliveInitialDelay: 30000,
-    reconnectTries: 10
 });
 
 const instance = axios.create({
