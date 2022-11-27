@@ -1,7 +1,7 @@
 require('dotenv').config();
 const axios = require("axios");
 const mongoose = require("mongoose");
-const { getPlaiceholder } = require('plaiceholder');
+const { blurhashFromURL } = require("blurhash-from-url");
 const { TVsSchema_id, CardsSchema, TVsErrorSchema  } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
@@ -110,10 +110,10 @@ async function database (chunks) {
             if ( res.status_message != 'The resource you requested could not be found.') {
                 let blurhash
                 if (res.poster_path || res.backdrop_path !== null) {
-                    const placeholder = await getPlaiceholder(`${img_base_url}w500${res.poster_path || res.backdrop_path}`)
-                    blurhash = `${placeholder.blurhash.hash}`
+                    const output = await blurhashFromURL(`${img_base_url}w500${res.poster_path || res.backdrop_path}`);
+                    blurhash = `${output.encoded}`
                 } else {
-                    blurhash = 'UMGN$=|}S4]X|}$RWXw#NxWXoJj?=4w}oJw|'
+                    blurhash = 'U3Ff8.jI0nowjufQfQfQ0Ck9~3aOjufQfQfQ'
                 }
                 const runtime = res.episode_run_time[0];
                 const keywords = {
