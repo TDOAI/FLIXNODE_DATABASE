@@ -23,12 +23,12 @@ const ID_DB = mongoose.createConnection(DB_ID, {
 const FULL_DB = mongoose.createConnection(DB_FULL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    connectTimeoutMS: 1200000,
     socketTimeoutMS: 1200000,
     serverSelectionTimeoutMS: 1200000,
     keepAlive: true,
     keepAliveInitialDelay: 30000,
+    maxPoolSize: 200
 });
 
 const instance = axios.create({
