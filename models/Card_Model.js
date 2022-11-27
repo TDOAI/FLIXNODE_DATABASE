@@ -26,6 +26,7 @@ const CardsSchema = new mongoose.Schema({
     backdrop_path: { type: String },
     poster_path: { type: String },
     original_title: { type: String, sparse:true },
+    blurhash: { type: String },
     title: { type: String, index:true },
     tagline: { type: String, sparse:true },
     overview: { type: String, sparse:true },
