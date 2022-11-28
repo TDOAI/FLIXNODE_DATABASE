@@ -10,7 +10,7 @@ const DB_FULL = process.env.DB_FULL
 const img_base_url = process.env.IMG_BASE_URL
 
 const FULL_DB = mongoose.createConnection(DB_FULL, {
-    maxPoolSize: 200
+    maxPoolSize: 100
 });
 
 FULL_DB.on("error", console.error.bind(console, "DB_FULL connection error:"));
@@ -69,7 +69,7 @@ async function main() {
                         const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
                         await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
                     }
-                }, { parallel: 250 })
+                }, { parallel: 10 })
         }
     }
     catch (err) {
