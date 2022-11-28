@@ -1,10 +1,13 @@
 require('dotenv').config();
 const axios = require("axios");
-const mongoose = require("mongoose");
-const { blurhashFromURL } = require("blurhash-from-url");
+const mongoose = require("mongoose")
+const { encode } =  require("blurhash");
+const sharp = require('sharp')
 const { TVsSchema_id, CardsSchema, TVsErrorSchema  } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
+const fetcha = (...args) =>
+	import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 
 const base_url = process.env.BASE_URL;
@@ -23,11 +26,11 @@ const ID_DB = mongoose.createConnection(DB_ID, {
 const FULL_DB = mongoose.createConnection(DB_FULL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    connectTimeoutMS: 1200000,
-    socketTimeoutMS: 1200000,
-    serverSelectionTimeoutMS: 1200000,
-    keepAlive: true,
-    keepAliveInitialDelay: 30000,
+    // connectTimeoutMS: 1200000,
+    // socketTimeoutMS: 1200000,
+    // serverSelectionTimeoutMS: 1200000,
+    // keepAlive: true,
+    // keepAliveInitialDelay: 30000,
     maxPoolSize: 200
 });
 
@@ -114,10 +117,26 @@ async function database (chunks) {
             if ( res.status_message != 'The resource you requested could not be found.') {
                 let blurhash
                 if (res.poster_path || res.backdrop_path !== null) {
-                    const output = await blurhashFromURL(`${img_base_url}w500${res.poster_path || res.backdrop_path}`);
-                    blurhash = `${output.encoded}`
+                    const response = await fetcha(`${img_base_url}w500${res.poster_path || res.backdrop_path}`);
+                    const arrayBuffer = await response.arrayBuffer();
+                    const returnedBuffer = Buffer.from(arrayBuffer);
+
+                    const { data, info } = await sharp(returnedBuffer)
+                        .ensureAlpha()
+                        .raw()
+                        .toBuffer({
+                            resolveWithObject: true,
+                        });
+                    const encoded = encode(
+                        new Uint8ClampedArray(data),
+                        info.width,
+                        info.height,
+                        3,
+                        4
+                    );
+                    blurhash = `${encoded}`
                 } else {
-                    blurhash = 'U3Ff8.jI0nowjufQfQfQ0Ck9~3aOjufQfQfQ'
+                    blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
                 }
                 const runtime = res.episode_run_time[0];
                 const keywords = {
