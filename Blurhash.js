@@ -24,7 +24,6 @@ async function main() {
     try {
         await CARD.
             find({}).
-            limit(2).
             cursor().
             eachAsync(async function (doc, i) {
                 if (doc.poster_path || doc.backdrop_path !== null) {
