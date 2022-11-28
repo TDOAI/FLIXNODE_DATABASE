@@ -1,13 +1,9 @@
 require('dotenv').config();
 const axios = require("axios");
 const mongoose = require("mongoose");
-const { encode } =  require("blurhash")
-const sharp = require('sharp')
 const { MoviesSchema_id, CardsSchema, MoviesErrorSchema } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
-const fetcha = (...args) =>
-	import('node-fetch').then(({default: fetch}) => fetch(...args));
 
 
 const base_url = process.env.BASE_URL;
@@ -115,29 +111,6 @@ async function database (chunks) {
             const req = await instance.get(`movie/${card.tmdb_id}?api_key=${api_key}&append_to_response=keywords`)
             const res = req.data
             if ( res.status_message != 'The resource you requested could not be found.') {
-                let blurhash
-                if (res.poster_path || res.backdrop_path !== null) {
-                    const response = await fetcha(`${img_base_url}w500${res.poster_path || res.backdrop_path}`);
-                    const arrayBuffer = await response.arrayBuffer();
-                    const returnedBuffer = Buffer.from(arrayBuffer);
-
-                    const { data, info } = await sharp(returnedBuffer)
-                        .ensureAlpha()
-                        .raw()
-                        .toBuffer({
-                            resolveWithObject: true,
-                        });
-                    const encoded = encode(
-                        new Uint8ClampedArray(data),
-                        info.width,
-                        info.height,
-                        3,
-                        4
-                    );
-                    blurhash = `${encoded}`
-                } else {
-                    blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
-                }
                 const document = { 
                     tmdb_id: res.id,
                     stream_id: card.stream_id,
@@ -145,7 +118,6 @@ async function database (chunks) {
                     backdrop_path: res.backdrop_path,
                     poster_path: res.poster_path,
                     original_title: res.original_title,
-                    blurhash: blurhash,
                     title: res.title,
                     tagline: res.tagline,
                     overview: res.overview,
