@@ -34,8 +34,8 @@ jobs:
       - name: Run script
         run: node TV.js
       - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH:
-    needs: [MOVIE, TV]
+  BLURHASH-MOVIE:
+    needs: MOVIE
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -44,5 +44,17 @@ jobs:
           node-version: '16.16'
       - run: yarn
       - name: Run script
-        run: node Blurhash.js
+        run: node Blurhash.js movie
+      - uses: gautamkrishnar/keepalive-workflow@v1
+  BLURHASH-TV:
+    needs: TV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.16'
+      - run: yarn
+      - name: Run script
+        run: node Blurhash.js tv
       - uses: gautamkrishnar/keepalive-workflow@v1
