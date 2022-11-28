@@ -17,15 +17,15 @@ const DB_ID = process.env.DB_ID;
 const DB_FULL = process.env.DB_FULL
 
 const ID_DB = mongoose.createConnection(DB_ID, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
     // keepAlive: true,
     // keepAliveInitialDelay: 300000
 });
 
 const FULL_DB = mongoose.createConnection(DB_FULL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
+    // useNewUrlParser: true,
+    // useUnifiedTopology: true,
     // connectTimeoutMS: 1200000,
     // socketTimeoutMS: 1200000,
     // serverSelectionTimeoutMS: 1200000,
