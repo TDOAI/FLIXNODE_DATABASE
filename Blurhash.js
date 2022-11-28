@@ -63,13 +63,13 @@ async function main() {
                             4
                         );
                         await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${encoded}` });
-                        console.log(encoded)
+                        // console.log(encoded)
                     }
                     else {
                         const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
                         await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
                     }
-                }, { parallel: limit/2 })
+                }, { parallel: 250 })
         }
     }
     catch (err) {

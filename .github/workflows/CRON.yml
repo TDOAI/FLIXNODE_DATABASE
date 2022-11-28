@@ -12,30 +12,30 @@ env:
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  MOVIE:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Movie.js
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  TV:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node TV.js
-      - uses: gautamkrishnar/keepalive-workflow@v1
+  # MOVIE:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Movie.js
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # TV:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node TV.js
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
   BLURHASH-MOVIE:
-    needs: MOVIE
+    # needs: MOVIE
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -47,7 +47,7 @@ jobs:
         run: node Blurhash.js movie
       - uses: gautamkrishnar/keepalive-workflow@v1
   BLURHASH-TV:
-    needs: TV
+    # needs: TV
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
