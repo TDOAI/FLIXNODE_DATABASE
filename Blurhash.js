@@ -66,7 +66,7 @@ async function test () {
         const batch = skip+((i-1)*10)
         await CARD.
         find({}).
-            where(type).
+            where({ media_type: 'movie' }).
             skip(skip+batch).
             limit(10).
             cursor().
