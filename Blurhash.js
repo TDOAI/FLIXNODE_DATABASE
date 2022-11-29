@@ -67,7 +67,7 @@ async function test () {
         await CARD.
         find({}).
             where({ media_type: 'movie' }).
-            skip(skip+batch).
+            skip(batch).
             limit(10).
             cursor().
             eachAsync(async function (doc, i) {
@@ -81,7 +81,7 @@ async function test () {
                     await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
                 }
             }, { parallel: 10 })
-            console.log(skip+batch)
+            console.log(batch)
     }
 }
 
