@@ -63,7 +63,7 @@ async function main() {
                         4
                     );
                     await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${encoded}` });
-                    // console.log(encoded)
+                    console.log(`${i}-----${doc.stream_id}`)
                 }
                 else {
                     const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'

@@ -34,18 +34,18 @@ jobs:
   #     - name: Run script
   #       run: node TV.js
   #     - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-MOVIE-1:
-    # needs: MOVIE
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js movie 1
-      - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-MOVIE-1:
+  #   # needs: MOVIE
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js movie 1
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
   BLURHASH-MOVIE-2:
     # needs: MOVIE
     runs-on: ubuntu-latest
@@ -58,99 +58,99 @@ jobs:
       - name: Run script
         run: node Blurhash.js movie 2
       - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-MOVIE-3:
-    # needs: MOVIE
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js movie 3
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-MOVIE-4:
-    # needs: MOVIE
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js movie 4
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-MOVIE-5:
-    # needs: MOVIE
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js movie 5
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-TV-1:
-    # needs: TV
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js tv 1
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-TV-2:
-    # needs: TV
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js tv 2
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-TV-3:
-    # needs: TV
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js tv 3
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-TV-4:
-    # needs: TV
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js tv 4
-      - uses: gautamkrishnar/keepalive-workflow@v1
-  BLURHASH-TV-5:
-    # needs: TV
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-node@v3
-        with:
-          node-version: '16.16'
-      - run: yarn
-      - name: Run script
-        run: node Blurhash.js tv 5
-      - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-MOVIE-3:
+  #   # needs: MOVIE
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js movie 3
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-MOVIE-4:
+  #   # needs: MOVIE
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js movie 4
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-MOVIE-5:
+  #   # needs: MOVIE
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js movie 5
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-TV-1:
+  #   # needs: TV
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js tv 1
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-TV-2:
+  #   # needs: TV
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js tv 2
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-TV-3:
+  #   # needs: TV
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js tv 3
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-TV-4:
+  #   # needs: TV
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js tv 4
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
+  # BLURHASH-TV-5:
+  #   # needs: TV
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '16.16'
+  #     - run: yarn
+  #     - name: Run script
+  #       run: node Blurhash.js tv 5
+  #     - uses: gautamkrishnar/keepalive-workflow@v1
