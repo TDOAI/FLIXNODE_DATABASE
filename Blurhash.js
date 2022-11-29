@@ -35,7 +35,7 @@ async function main() {
             type = { media_type: 'tv' }
         }
         const count = await CARD.where(type).countDocuments()
-        const limit = Math.ceil(count/5)
+        const limit = Math.ceil(count/10)
         const skip = limit*(section-1)
         await CARD.
             find({}).
