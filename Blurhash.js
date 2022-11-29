@@ -41,13 +41,18 @@ async function main() {
             limit(limit).
             cursor().
             eachAsync(async function (doc, i) {
-                if (doc.poster_path != null) {
-                    const placeholder = await getPlaiceholder(`${img_base_url}w500${doc.poster_path}`)
-                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${placeholder.blurhash.hash}` });
-                    // console.log(`${i}-----${doc.stream_id}`)
+                if (doc.poster_path || doc.backdrop_path != null) {
+                    try {
+                        const placeholder = await getPlaiceholder(`${img_base_url}w500${doc.poster_path || doc.backdrop_path}`)
+                        await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${placeholder.blurhash.hash}` });
+                    }
+                    catch (err) {
+                        const blurhash = 'U94.0?IuIn%N?KIrM{%3=|IpRk%1?KIrM{%3'
+                        await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
+                    }
                 }
                 else {
-                    const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
+                    const blurhash = 'U94.0?IuIn%N?KIrM{%3=|IpRk%1?KIrM{%3'
                     await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
                 }
             }, { parallel: 10 })
@@ -57,35 +62,10 @@ async function main() {
     }
 }
 
-// main()
-//     .finally(async() => await FULL_DB.close())
+main()
+    .finally(async() => await FULL_DB.close())
 
-async function test () {
-    const skip = 897
-    for (i=1; i<=90 ; i++) {
-        const batch = skip+((i-1)*10)
-        await CARD.
-        find({}).
-            where({ media_type: 'movie' }).
-            skip(batch).
-            limit(10).
-            cursor().
-            eachAsync(async function (doc, i) {
-                if (doc.poster_path != null) {
-                    const placeholder = await getPlaiceholder(`${img_base_url}w500${doc.poster_path}`)
-                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${placeholder.blurhash.hash}` });
-                    // console.log(`${i}-----${doc.stream_id}`)
-                }
-                else {
-                    const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
-                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
-                }
-            }, { parallel: 10 })
-            console.log(batch)
-    }
-}
 
-test()
 
 
 
