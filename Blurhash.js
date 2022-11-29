@@ -1,9 +1,6 @@
 require('dotenv').config();
-const fetch = (...args) =>
-	import('node-fetch').then(({default: fetch}) => fetch(...args));
+const { getPlaiceholder } = require('plaiceholder')
 const mongoose = require("mongoose");
-const { encode } = require('blurhash')
-const sharp = require('sharp')
 const { CardsSchema } = require('./models/Card_Model');
 
 const DB_FULL = process.env.DB_FULL
@@ -45,24 +42,8 @@ async function main() {
             cursor().
             eachAsync(async function (doc, i) {
                 if (doc.poster_path != null) {
-                    const response = await fetch(`${img_base_url}w500${doc.poster_path}`);
-                    const arrayBuffer = await response.arrayBuffer();
-                    const returnedBuffer = Buffer.from(arrayBuffer);
-
-                    const { data, info } = await sharp(returnedBuffer)
-                        .ensureAlpha()
-                        .raw()
-                        .toBuffer({
-                            resolveWithObject: true,
-                        });
-                    const encoded = encode(
-                        new Uint8ClampedArray(data),
-                        info.width,
-                        info.height,
-                        3,
-                        4
-                    );
-                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${encoded}` });
+                    const placeholder = await getPlaiceholder(`${img_base_url}w500${doc.poster_path}`)
+                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${placeholder.blurhash.hash}` });
                     console.log(`${i}-----${doc.stream_id}`)
                 }
                 else {
@@ -79,6 +60,28 @@ async function main() {
 main()
     .finally(async() => await FULL_DB.close())
 
+// async function test() {
+//     // const response = await fetch(`${img_base_url}w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg`);
+//     // const arrayBuffer = await response.arrayBuffer();
+//     // const returnedBuffer = Buffer.from(arrayBuffer);
+
+//     // const { data, info } = await sharp(returnedBuffer)
+//     //     .ensureAlpha()
+//     //     .raw()
+//     //     .toBuffer({
+//     //         resolveWithObject: true,
+//     //     });
+//     // const encoded = encode(
+//     //     new Uint8ClampedArray(data),
+//     //     info.width,
+//     //     info.height,
+//     //     3,
+//     //     4
+//     // );
+//     const placeholder = await getPlaiceholder(`${img_base_url}w500/pFlaoHTZeyNkG83vxsAJiGzfSsa.jpg`)
+//     console.log(placeholder.blurhash.hash)
+// }
+// test()
 
 
 
