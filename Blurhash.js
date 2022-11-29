@@ -20,6 +20,7 @@ FULL_DB.on("close",() => console.log("SUCCESSFULLY DISCONNECTED FROM DB_FULL"));
 const CARD = FULL_DB.model("Card", CardsSchema);
 
 const arg = process.argv.slice(2)[0]
+const section = parseInt(process.argv.slice(2)[1])
 
 const delay = async (ms = 6000) =>
   new Promise(resolve => setTimeout(resolve, ms))
@@ -34,43 +35,41 @@ async function main() {
             type = { media_type: 'tv' }
         }
         const count = await CARD.where(type).countDocuments()
-        const limit = Math.ceil(count/25)
-        for (let i = 1; i<=25 ; i++) {
-            const skip = limit*(i-1)
-            await CARD.
-                find({}).
-                where(type).
-                skip(skip).
-                limit(limit).
-                cursor().
-                eachAsync(async function (doc, i) {
-                    if (doc.poster_path || doc.backdrop_path !== null) {
-                        const response = await fetch(`${img_base_url}w500${doc.poster_path || doc.backdrop_path}`);
-                        const arrayBuffer = await response.arrayBuffer();
-                        const returnedBuffer = Buffer.from(arrayBuffer);
+        const limit = Math.ceil(count/5)
+        const skip = limit*(section-1)
+        await CARD.
+            find({}).
+            where(type).
+            skip(skip).
+            limit(limit).
+            cursor().
+            eachAsync(async function (doc, i) {
+                if (doc.poster_path || doc.backdrop_path !== null) {
+                    const response = await fetch(`${img_base_url}w500${doc.poster_path || doc.backdrop_path}`);
+                    const arrayBuffer = await response.arrayBuffer();
+                    const returnedBuffer = Buffer.from(arrayBuffer);
 
-                        const { data, info } = await sharp(returnedBuffer)
-                            .ensureAlpha()
-                            .raw()
-                            .toBuffer({
-                                resolveWithObject: true,
-                            });
-                        const encoded = encode(
-                            new Uint8ClampedArray(data),
-                            info.width,
-                            info.height,
-                            3,
-                            4
-                        );
-                        await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${encoded}` });
-                        // console.log(encoded)
-                    }
-                    else {
-                        const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
-                        await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
-                    }
-                }, { parallel: 10 })
-        }
+                    const { data, info } = await sharp(returnedBuffer)
+                        .ensureAlpha()
+                        .raw()
+                        .toBuffer({
+                            resolveWithObject: true,
+                        });
+                    const encoded = encode(
+                        new Uint8ClampedArray(data),
+                        info.width,
+                        info.height,
+                        3,
+                        4
+                    );
+                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${encoded}` });
+                    // console.log(encoded)
+                }
+                else {
+                    const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
+                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
+                }
+            }, { parallel: 10 })
     }
     catch (err) {
        console.log(err)
@@ -79,3 +78,5 @@ async function main() {
 
 main()
     .finally(async() => await FULL_DB.close())
+
+
