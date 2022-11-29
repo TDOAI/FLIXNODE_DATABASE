@@ -44,8 +44,8 @@ async function main() {
             limit(limit).
             cursor().
             eachAsync(async function (doc, i) {
-                if (doc.poster_path || doc.backdrop_path !== null) {
-                    const response = await fetch(`${img_base_url}w500${doc.poster_path || doc.backdrop_path}`);
+                if (doc.poster_path != null) {
+                    const response = await fetch(`${img_base_url}w500${doc.poster_path}`);
                     const arrayBuffer = await response.arrayBuffer();
                     const returnedBuffer = Buffer.from(arrayBuffer);
 
