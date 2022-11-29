@@ -274,3 +274,15 @@ jobs:
       - name: Run script
         run: node Blurhash.js tv 10
       - uses: gautamkrishnar/keepalive-workflow@v1
+  BLURHASH-TEST:
+    # needs: TV
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '16.16'
+      - run: yarn
+      - name: Run script
+        run: node Blurhash.js
+      - uses: gautamkrishnar/keepalive-workflow@v1

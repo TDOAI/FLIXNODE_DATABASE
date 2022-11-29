@@ -57,8 +57,33 @@ async function main() {
     }
 }
 
-main()
-    .finally(async() => await FULL_DB.close())
+// main()
+//     .finally(async() => await FULL_DB.close())
+
+async function test () {
+    const skip = 897
+    for (i=1; i<=90 ; i++) {
+        const batch = skip+((i-1)*10)
+        await CARD.
+        find({}).
+            where(type).
+            skip(skip+batch).
+            limit(10).
+            cursor().
+            eachAsync(async function (doc, i) {
+                if (doc.poster_path != null) {
+                    const placeholder = await getPlaiceholder(`${img_base_url}w500${doc.poster_path}`)
+                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: `${placeholder.blurhash.hash}` });
+                    // console.log(`${i}-----${doc.stream_id}`)
+                }
+                else {
+                    const blurhash = 'T3FVnJjI0njufQfQ0Ck9~3jufQfQ'
+                    await CARD.updateOne({ stream_id: doc.stream_id }, { blurhash: blurhash });
+                }
+            }, { parallel: 10 })
+            console.log(skip+batch)
+    }
+}
 
 
 
