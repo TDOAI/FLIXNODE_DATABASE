@@ -4,6 +4,8 @@ const mongoose = require("mongoose");
 const { MoviesSchema_id, CardsSchema, MoviesErrorSchema } = require('./models/Card_Model');
 const https = require('https');
 const http = require('http');
+const uniqueSlug = require('unique-slug')
+const { getPlaiceholder } = require('plaiceholder')
 
 
 const base_url = process.env.BASE_URL;
@@ -40,6 +42,53 @@ FULL_DB.on("close",() => console.log("SUCCESSFULLY DISCONNECTED FROM DB_FULL"));
 const Movie_ID = ID_DB.model("Movie", MoviesSchema_id);
 const CARD = FULL_DB.model("Card", CardsSchema);
 const Movie_With_Error = FULL_DB.model("Movie_Error", MoviesErrorSchema);
+
+async function CleanCredits(cred) {
+    const result_cast = Object.values(
+        cred.cast.slice(0, 8)
+            .reduce((acc, person) => {
+                acc[person.order] = {
+                    id: person.id, name: person.name, original_name: person.original_name, character: person.character, popularity: person.popularity, order: person.order
+                }
+                return acc
+            }, {})
+    )
+    const result_crew = Object.values(
+        cred.crew
+            .filter((person) => person.job === 'Producer' || person.job === 'Director' || person.job === 'Story' || person.job === 'Writer' || person.job === 'Screenplay' || person.job === 'Executive Producer' || person.job === 'Book' || person.job === 'Original Music Composer')
+            .reduce((acc, person) => {
+                if (acc[person.id]) {
+                    acc[person.id].jobs.push(person.job);
+                } else {
+                    acc[person.id] = { id: person.id, name: person.name, original_name: person.original_name, jobs: [person.job], popularity: person.popularity };
+                }
+                return acc;
+            }, {})
+    ).sort((a, b) => b.popularity - a.popularity).slice(0, 8);
+    return {
+        cast: result_cast,
+        crew: result_crew
+    }
+}
+
+async function blurdata(poster_path) {
+    let blurhash
+    if (poster_path != null) {
+        try {
+            const placeholder = await getPlaiceholder(`${img_base_url}w500${poster_path}`)
+            blurhash = `${placeholder.blurhash.hash}`
+        }
+        catch (err) {
+            const placeholder = await getPlaiceholder(`https://i.imgur.com/Mch5TSH.png`)
+            blurhash = `${placeholder.blurhash.hash}`
+        }
+    }
+    else {
+        const placeholder = await getPlaiceholder(`https://i.imgur.com/Mch5TSH.png`)
+        blurhash = `${placeholder.blurhash.hash}`
+    }
+    return blurhash
+}
 
 
 async function fetch () {
@@ -91,16 +140,21 @@ async function chunkify(a, n, balanced) {
     return out;
 };
 
-const delay = async (ms = 6000) =>
-  new Promise(resolve => setTimeout(resolve, ms))
+// const delay = async (ms = 6000) =>
+//   new Promise(resolve => setTimeout(resolve, ms))
 
 async function database (chunks) {
     for (let i = 0; i < chunks.length; i += 1) {
         const promises = await (chunks[i]|| []).map(async card => {
-            const req = await instance.get(`movie/${card.tmdb_id}?api_key=${api_key}&append_to_response=keywords`)
+            const req = await instance.get(`movie/${card.tmdb_id}?api_key=${api_key}&append_to_response=keywords,credits`)
             const res = req.data
             if ( res.status_message != 'The resource you requested could not be found.') {
+                const credits = await CleanCredits(res.credits)
+                const cardSlug = uniqueSlug(`${card.stream_id}`).toUpperCase()
+                const blurhash = await blurdata(res.poster_path)
                 const document = { 
+                    slug: cardSlug,
+                    blurhash: blurhash,
                     tmdb_id: res.id,
                     stream_id: card.stream_id,
                     media_type: 'movie',
@@ -113,12 +167,14 @@ async function database (chunks) {
                     release_date: res.release_date,
                     runtime: res.runtime,
                     belongs_to_collection: res.belongs_to_collection,
+                    production_companies: res.production_companies,
                     production_countries: res.production_countries,
                     genres: res.genres,
                     keywords: res.keywords,
                     popularity: res.popularity,
                     vote_average: res.vote_average,
-                    vote_count: res.vote_count
+                    vote_count: res.vote_count,
+                    credits: credits
                 }
                 // execute find query
                 const query = { stream_id: card.stream_id };
@@ -139,7 +195,7 @@ async function database (chunks) {
             }
         })
         await Promise.all(promises);
-        await delay(6000)
+        // await delay(6000)
     }
 }
 
